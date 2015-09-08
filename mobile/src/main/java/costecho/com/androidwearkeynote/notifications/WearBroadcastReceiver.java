@@ -27,28 +27,24 @@ public class WearBroadcastReceiver extends ParsePushBroadcastReceiver {
         JSONObject json;
         try {
             json = new JSONObject(intent.getExtras().getString("com.parse.Data"));
-            sendTimeLineNotification(context, intent, json.get("message").toString());
+            sendNotification(context, intent, json.getString("alert").toString());
         } catch (JSONException e) {
-            sendTimeLineNotification(context, intent, "Phone and wear notification with actions");
-
+            sendNotification(context, intent, "Phone and wear notification with actions");
         }
 
 
     }
 
 
-    public void sendTimeLineNotification(final Context context, Intent intent,String msg) {
+    public void sendNotification(final Context context, Intent intent, String msg) {
 
-        long time = new Date().getTime();
-        String tmpStr = String.valueOf(time);
-        String last4Str = tmpStr.substring(tmpStr.length() - 5);
-        int notificationId = Integer.valueOf(last4Str);
+        int notificationId = Integer.valueOf(String.valueOf(new Date().getTime()).substring(0,4));
 
         String EXTRA_VOICE_REPLY = "extra_voice_reply";
         String[] replyChoices = context.getResources().getStringArray(R.array.talking_options);
 
         RemoteInput remoteInput = new RemoteInput.Builder(EXTRA_VOICE_REPLY)
-                .setLabel("Habla")
+                .setLabel("Hablale al reloj")
                 .setChoices(replyChoices)
                 .build();
 
@@ -99,7 +95,7 @@ public class WearBroadcastReceiver extends ParsePushBroadcastReceiver {
                         .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                         .setVibrate(new long[]{1000, 1000, 1000})
                         .addAction(R.drawable.ic_media_play, "Reply", pendingAttendIntent)
-                        .setContentText(msg).setStyle(new NotificationCompat.BigTextStyle().bigText(msg)).setContentIntent(notifyPendingIntent)
+                        .setContentText(msg).setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
                 ;
 
         NotificationManager mNotificationManager =

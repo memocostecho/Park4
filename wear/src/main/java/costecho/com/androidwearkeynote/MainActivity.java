@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -60,11 +59,6 @@ public class MainActivity extends Activity implements DataApi.DataListener,
 
     public void sendInfo(){
 
-        colorPicker.getColor();
-        letter.getSelectedItem();
-        number.getSelectedItem();
-
-
         PutDataMapRequest putDataMapReq = PutDataMapRequest.create("/letter");
         putDataMapReq.getDataMap().putString("parking.letter", letter.getSelectedItem().toString() + " " +number.getSelectedItem().toString());
             PutDataRequest putDataReq = putDataMapReq.asPutDataRequest();
@@ -114,7 +108,7 @@ public class MainActivity extends Activity implements DataApi.DataListener,
                 DataItem item = event.getDataItem();
                 if (item.getUri().getPath().compareTo("/letter") == 0) {
                     DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
-                    //updateCount(dataMap.getInt(COUNT_KEY));
+
                 }
             } else if (event.getType() == DataEvent.TYPE_DELETED) {
                 // DataItem deleted

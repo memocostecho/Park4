@@ -11,7 +11,7 @@
     <Spinner
         android:layout_width="25dp"
         android:layout_height="wrap_content"
-        android:id="@+id/spinner2"
+        android:id="@+id/letter_spinner"
         android:layout_gravity="center_horizontal"
         android:paddingTop="50dp"
         android:entries="@array/parking_letters"
@@ -27,9 +27,9 @@
     <Spinner
         android:layout_width="25dp"
         android:layout_height="wrap_content"
-        android:id="@+id/spinner3"
+        android:id="@+id/number_spinner"
         android:layout_gravity="center_horizontal"
         android:paddingTop="50dp"
-        android:entries="@array/parking_letters"
+        android:entries="@array/parking_numbers"
         android:layout_marginTop="15dp" />
 </LinearLayout>
