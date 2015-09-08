@@ -2,4 +2,22 @@
     <string name="app_name">AndroidWearKeynote</string>
     <string name="hello_round">Hello Round World!</string>
     <string name="hello_square">Hello Square World!</string>
+
+
+    <string-array name="parking_letters">
+        <item>A</item>
+        <item>B</item>
+        <item>C</item>
+        <item>A</item>
+        <item>B</item>
+        <item>C</item>
+        <item>A</item>
+        <item>B</item>
+        <item>C</item>
+        <item>A</item>
+        <item>B</item>
+        <item>C</item>
+    </string-array>
+
+
 </resources>

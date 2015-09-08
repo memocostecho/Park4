@@ -1,9 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:orientation="vertical"
-    tools:context=".MainActivity" tools:deviceIds="wear_square">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:id="@+id/scrollView" >
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" android:orientation="horizontal"
+    tools:context=".MainActivity" tools:deviceIds="wear_square"
+    >
 
-    <TextView android:id="@+id/text" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:text="@string/hello_square" />
+
+    <Spinner
+        android:layout_width="25dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinner2"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="50dp"
+        android:entries="@array/parking_letters"
+        android:layout_marginTop="15dp" />
+
+    <com.larswerkman.holocolorpicker.ColorPicker
+        android:id="@+id/picker"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="15dp" />
+
+    <Spinner
+        android:layout_width="25dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinner3"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="50dp"
+        android:entries="@array/parking_letters"
+        android:layout_marginTop="15dp" />
 </LinearLayout>
+    </ScrollView>
