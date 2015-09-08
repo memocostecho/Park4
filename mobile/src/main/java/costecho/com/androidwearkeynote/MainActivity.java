@@ -1,10 +1,11 @@
 package costecho.com.androidwearkeynote;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -13,7 +14,6 @@ import com.google.android.gms.wearable.DataApi;
 import com.google.android.gms.wearable.DataEvent;
 import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.DataItem;
-import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.Wearable;
 
@@ -22,11 +22,15 @@ public class MainActivity extends AppCompatActivity implements DataApi.DataListe
         OnConnectionFailedListener {
 
     private GoogleApiClient mGoogleApiClient;
+    RelativeLayout container;
+    TextView parkingInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        container = (RelativeLayout)findViewById(R.id.parking_container);
+        parkingInfo = (TextView)findViewById(R.id.datos_parking);
         setApiClient();
     }
 
@@ -78,9 +82,10 @@ public class MainActivity extends AppCompatActivity implements DataApi.DataListe
             if (event.getType() == DataEvent.TYPE_CHANGED) {
                 DataItem item = event.getDataItem();
                 if (item.getUri().getPath().compareTo("/letter") == 0) {
-                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
-                    Toast.makeText(this,"Recibido",Toast.LENGTH_LONG).show();
-                    //updateCount(dataMap.getInt(COUNT_KEY));
+                    parkingInfo.setText(DataMapItem.fromDataItem(item).getDataMap().getString("parking.letter"));
+                }else if(item.getUri().getPath().compareTo("/color")==0){
+                    container.setBackgroundColor(DataMapItem.fromDataItem(item).getDataMap().getInt("parking.color"));
+
                 }
             } else if (event.getType() == DataEvent.TYPE_DELETED) {
                 // DataItem deleted

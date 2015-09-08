@@ -4,6 +4,10 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.wearable.view.WatchViewStub;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -19,13 +23,17 @@ import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
+import com.larswerkman.holocolorpicker.ColorPicker;
 
 public class MainActivity extends Activity implements DataApi.DataListener,
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener{
+        GoogleApiClient.OnConnectionFailedListener, OnItemSelectedListener {
 
-    private TextView mTextView;
+
     private GoogleApiClient mGoogleApiClient;
+    private ColorPicker colorPicker;
+    private Spinner letter;
+    private Spinner number;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,28 +45,44 @@ public class MainActivity extends Activity implements DataApi.DataListener,
         stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
             @Override
             public void onLayoutInflated(WatchViewStub stub) {
-                mTextView = (TextView) stub.findViewById(R.id.text);
+                colorPicker = (ColorPicker) stub.findViewById(R.id.picker);
+                letter = (Spinner) stub.findViewById(R.id.letter_spinner);
+                number = (Spinner) stub.findViewById(R.id.number_spinner);
+                number.setOnItemSelectedListener(MainActivity.this);
+
+
             }
         });
+
 
     }
 
 
     public void sendInfo(){
 
-            PutDataMapRequest putDataMapReq = PutDataMapRequest.create("/letter");
-            putDataMapReq.getDataMap().putString("parking.letter", "C");
+        colorPicker.getColor();
+        letter.getSelectedItem();
+        number.getSelectedItem();
+
+
+        PutDataMapRequest putDataMapReq = PutDataMapRequest.create("/letter");
+        putDataMapReq.getDataMap().putString("parking.letter", letter.getSelectedItem().toString() + " " +number.getSelectedItem().toString());
             PutDataRequest putDataReq = putDataMapReq.asPutDataRequest();
             PendingResult<DataApi.DataItemResult> pendingResult =
                     Wearable.DataApi.putDataItem(mGoogleApiClient, putDataReq);
-            pendingResult.setResultCallback(new ResultCallback<DataApi.DataItemResult>() {
+        pendingResult.setResultCallback(new ResultCallback<DataApi.DataItemResult>() {
             @Override
             public void onResult(final DataApi.DataItemResult result) {
-                if(result.getStatus().isSuccess()) {
+                if (result.getStatus().isSuccess()) {
                     Log.d("WEAR", "Data item set: " + result.getDataItem().getUri());
                 }
-            }
-        });
+                }
+            });
+
+        PutDataMapRequest putDataMapIntReq = PutDataMapRequest.create("/color");
+        putDataMapIntReq.getDataMap().putInt("parking.color", colorPicker.getColor());
+        PutDataRequest putDataIntReq = putDataMapIntReq.asPutDataRequest();
+        Wearable.DataApi.putDataItem(mGoogleApiClient, putDataIntReq);
 
     }
 
@@ -75,7 +99,7 @@ public class MainActivity extends Activity implements DataApi.DataListener,
     @Override
     public void onConnected(Bundle bundle) {
         Wearable.DataApi.addListener(mGoogleApiClient, this);
-        sendInfo();
+
     }
 
     @Override
@@ -109,6 +133,17 @@ public class MainActivity extends Activity implements DataApi.DataListener,
     @Override
     protected void onResume() {
         super.onResume();
+
+    }
+
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        sendInfo();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
 
     }
 }
