@@ -47,13 +47,13 @@ public class WearDataListenerService extends WearableListenerService {
 
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("parking.letters", letters);
-        editor.commit();
+        editor.apply();
     }
 
     public void storeColor(int color){
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt("parking.color", color);
-        editor.commit();
+        editor.apply();
 
     }
 
