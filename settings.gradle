@@ -1,1 +1,1 @@
-include ':mobile', ':wear', ':gdgunamwatchface'
+include ':mobile', ':wear'
