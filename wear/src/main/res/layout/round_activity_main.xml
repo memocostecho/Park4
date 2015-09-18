@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" android:orientation="horizontal"
     tools:context=".MainActivity" tools:deviceIds="wear_square"
-    >
+    android:background="#fdfffd">
 
 
     <Spinner
@@ -15,7 +15,8 @@
         android:layout_gravity="center_horizontal"
         android:paddingTop="50dp"
         android:entries="@array/parking_letters"
-        android:layout_marginTop="15dp" />
+        android:layout_marginTop="15dp"
+        android:backgroundTint="#707170" />
 
     <com.larswerkman.holocolorpicker.ColorPicker
         android:id="@+id/picker"
@@ -31,5 +32,6 @@
         android:layout_gravity="center_horizontal"
         android:paddingTop="50dp"
         android:entries="@array/parking_numbers"
-        android:layout_marginTop="15dp" />
+        android:layout_marginTop="15dp"
+        android:backgroundTint="#707170" />
 </LinearLayout>
