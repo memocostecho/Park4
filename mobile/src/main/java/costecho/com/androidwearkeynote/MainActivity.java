@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.RemoteInput;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -31,7 +32,7 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements DataApi.DataListener,
         GoogleApiClient.ConnectionCallbacks,
-        OnConnectionFailedListener {
+        OnConnectionFailedListener,SharedPreferences.OnSharedPreferenceChangeListener {
 
     private GoogleApiClient mGoogleApiClient;
     RelativeLayout container;
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements DataApi.DataListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        PreferenceManager.getDefaultSharedPreferences(this);
         sharedPref= getPreferences(Context.MODE_PRIVATE);
         container = (RelativeLayout)findViewById(R.id.parking_container);
         parkingInfo = (TextView)findViewById(R.id.datos_parking);
@@ -95,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements DataApi.DataListe
     public void onConnectionSuspended(int i) {
 
     }
+
 
     @Override
     public void onDataChanged(DataEventBuffer dataEventBuffer) {
@@ -154,14 +157,15 @@ public class MainActivity extends AppCompatActivity implements DataApi.DataListe
 
     public void sendInfo(){
 
-        long time = new Date().getTime();
-        String tmpStr = String.valueOf(time);
-        String last4Str = tmpStr.substring(tmpStr.length() - 5);
-
-        PutDataMapRequest putDataMapIntReq = PutDataMapRequest.create("/notification");
-        putDataMapIntReq.getDataMap().putString("notification.custom", last4Str);
+        PutDataMapRequest putDataMapIntReq = PutDataMapRequest.create("/color");
+        putDataMapIntReq.getDataMap().putInt("parking.color", getColor());
         PutDataRequest putDataIntReq = putDataMapIntReq.asPutDataRequest();
         Wearable.DataApi.putDataItem(mGoogleApiClient, putDataIntReq);
+
+        PutDataMapRequest putDataMapStringReq = PutDataMapRequest.create("/letter");
+        putDataMapStringReq.getDataMap().putString("parking.letter", getNumberLetter());
+        PutDataRequest putDataStringReq = putDataMapStringReq.asPutDataRequest();
+        Wearable.DataApi.putDataItem(mGoogleApiClient, putDataStringReq);
 
     }
 
@@ -180,4 +184,8 @@ public class MainActivity extends AppCompatActivity implements DataApi.DataListe
     }
 
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        onCreate(new Bundle());
+    }
 }

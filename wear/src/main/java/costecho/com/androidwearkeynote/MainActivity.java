@@ -1,10 +1,18 @@
 package costecho.com.androidwearkeynote;
 
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
+import android.support.wearable.activity.ConfirmationActivity;
 import android.support.wearable.view.WatchViewStub;
 import android.util.Log;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Spinner;
@@ -40,6 +48,7 @@ public class MainActivity extends Activity implements DataApi.DataListener,
         setContentView(R.layout.activity_main);
         setApiClient();
 
+
         final WatchViewStub stub = (WatchViewStub) findViewById(R.id.watch_view_stub);
         stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
             @Override
@@ -47,6 +56,8 @@ public class MainActivity extends Activity implements DataApi.DataListener,
                 colorPicker = (ColorPicker) stub.findViewById(R.id.picker);
                 letter = (Spinner) stub.findViewById(R.id.letter_spinner);
                 number = (Spinner) stub.findViewById(R.id.number_spinner);
+                number.setSelected(false);
+                number.setSelection(Adapter.NO_SELECTION);
                 number.setOnItemSelectedListener(MainActivity.this);
 
 
@@ -133,7 +144,44 @@ public class MainActivity extends Activity implements DataApi.DataListener,
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+
+
+        Bitmap bitmap = Bitmap.createBitmap(320,320, Bitmap.Config.ARGB_8888);
+        bitmap.eraseColor(colorPicker.getColor());
+
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(getApplicationContext())
+                        .setSmallIcon(R.mipmap.ic_p4)
+                        .setContentTitle(letter.getSelectedItem().toString() + " " + number.getSelectedItem().toString())
+                        .setGroup("grouping.this")
+                        .extend(new NotificationCompat.WearableExtender().setBackground(bitmap))
+                        ;
+
+        NotificationManager mNotificationManager =
+                (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(2, mBuilder.build());
         sendInfo();
+
+
+
+        Intent intent = new Intent(this, ConfirmationActivity.class);
+        intent.putExtra(ConfirmationActivity.EXTRA_ANIMATION_TYPE,
+                ConfirmationActivity.SUCCESS_ANIMATION);
+        intent.putExtra(ConfirmationActivity.EXTRA_MESSAGE,
+                "Notificacion creada y enviada al telefono.");
+        startActivity(intent);
+        //finish();
+
+
+
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        finish();
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

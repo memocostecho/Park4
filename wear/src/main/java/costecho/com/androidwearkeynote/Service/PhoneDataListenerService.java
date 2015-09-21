@@ -5,11 +5,16 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.google.android.gms.wearable.DataEvent;
 import com.google.android.gms.wearable.DataEventBuffer;
+import com.google.android.gms.wearable.DataItem;
+import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.WearableListenerService;
 
 import costecho.com.androidwearkeynote.MainActivity;
@@ -21,6 +26,9 @@ import costecho.com.androidwearkeynote.R;
 public class PhoneDataListenerService extends WearableListenerService {
 
     private static final String TAG = "PhoneToWatch::";
+    int color;
+
+
 
     @Override
     public void onDataChanged(DataEventBuffer dataEvents) {
@@ -29,30 +37,30 @@ public class PhoneDataListenerService extends WearableListenerService {
         }
 
 
-        Intent notificationIntent = new Intent(this, MainActivity.class);
-        PendingIntent notificationPendingIntent = PendingIntent.getActivity(
-                this, 0, notificationIntent, 0);
+        /*for (DataEvent event : dataEvents) {
+            if (event.getType() == DataEvent.TYPE_CHANGED) {
+                DataItem item = event.getDataItem();
+                if (item.getUri().getPath().compareTo("/letter") == 0) {
+                    NotificationCompat.Builder mBuilder =
+                            new NotificationCompat.Builder(getApplicationContext())
+                                    .setSmallIcon(R.mipmap.ic_p4)
+                                    .setContentTitle(DataMapItem.fromDataItem(item).getDataMap().getString("parking.letter"))
+                                    .setAutoCancel(true)
+                                    .setGroup("grouping.this")
+                                    .setColor(color);
 
-        Notification myFullScreenNotification = new Notification.Builder(getApplicationContext())
-                .extend(new Notification.WearableExtender()
-                        .setCustomSizePreset(Notification.WearableExtender.SIZE_FULL_SCREEN)
-                        .setDisplayIntent(notificationPendingIntent))
-                .build();
+                    NotificationManager mNotificationManager =
+                            (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                    mNotificationManager.notify(1, mBuilder.build());
 
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(getApplicationContext())
-                        .setSmallIcon(R.drawable.ic_full_sad)
-                        .setContentTitle("Android Wear Keynote")
-                        .setAutoCancel(true)
-                        .setGroup("grouping.this")
-                        .extend(new NotificationCompat.WearableExtender().addPage(myFullScreenNotification))
-                ;
+                }else if(item.getUri().getPath().compareTo("/color")==0){
 
-        NotificationManager mNotificationManager =
-                (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(1, mBuilder.build());
+                    color = DataMapItem.fromDataItem(item).getDataMap().getInt("parking.color");
 
-
+                }
+            }
+        }*/
     }
+
 }
 
